@@ -14,6 +14,6 @@
               :source-paths ["src"]
               :compiler {
                 :output-to "sketch.js"
-                :output-dir "out"
+                :output-dir "public"
                 :optimizations :none
                 :source-map true}}]})

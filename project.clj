@@ -13,7 +13,7 @@
     :builds [{:id "sketch"
               :source-paths ["src"]
               :compiler {
-                :output-to "sketch.js"
-                :output-dir "public"
+                :output-to "public/sketch.js"
+                :output-dir "public/js"
                 :optimizations :none
                 :source-map true}}]})

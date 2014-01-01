@@ -1,3 +1,7 @@
 html, body {
   background: #444;
 }
+
+canvas {
+  background: #000;
+}

@@ -1,31 +1,66 @@
 (ns sketch.core
-  (:require [clojure.browser.dom :as dom])
+  (:require [clojure.browser.dom :as dom]
+            [goog.dom :as gdom]
+            [goog.style :as style]
+            [goog.events :as events]
+            [sketch.world :as world]
+            [sketch.drawing :as drawing]
+            )
   (:require-macros [sketch.macros :as debug]))
 
-(def canvas-width 400)
-(def canvas-height 400)
+; 31 is height of header p tag, so 10px on bottom/sides
+(def canvas-width (- (.-width (gdom/getViewportSize)) 20))
+(def canvas-height (- (.-height (gdom/getViewportSize)) 41))
+(def canvas (dom/get-element "sketch"))
+(def ctx (.getContext canvas "2d"))
 
-(defn setup [canvas ctx]
-  (let [width (str canvas-width "px")
-        height (str canvas-height "px")]
-    (dom/set-properties canvas {"width" width "height" height}))
+(def state (atom {}))
+(def running (atom true))
+(def paused (atom false))
+(def clock (atom 0))
+
+(declare frame)
+
+(defn request-next-frame []
+  (js/requestAnimationFrame frame))
+
+(defn frame [timestamp]
+  (let [elapsed (- timestamp @clock)]
+    (when (and @running (not @paused))
+      (swap! state world/update elapsed)
+      (drawing/draw ctx @state)))
+  (reset! clock timestamp)
+  (request-next-frame))
+
+(defn keydown [event]
+  (condp = (.-keyCode event)
+    32 (swap! paused not)
+    :nothing))
+
+(defn blur-window [event]
+  (compare-and-set! running true false))
+
+(defn focus-window [event]
+  (if (compare-and-set! running false true)
+    (request-next-frame)))
+
+(defn setup []
+  (let [width  (str canvas-width  "px")
+        height (str canvas-height "px")
+        container (dom/get-element "container")
+        header (dom/get-element "header")]
+    (dom/set-properties canvas {"width" width "height" height})
+    (style/setSize container canvas-width canvas-height)
+    (style/setWidth header canvas-width))
+  (events/listen js/document "keydown" keydown)
+  (events/listen js/window "blur" blur-window)
+  (events/listen js/window "focus" focus-window)
   ; invert the y coordinates so y starts at bottom
   (.setTransform ctx 1 0 0 -1 0 canvas-height))
 
-(defn update [dt])
+(defn init []
+  (setup)
+  (world/setup state canvas-width canvas-height)
+  (request-next-frame))
 
-(defn draw [ctx]
-  (doto ctx
-    (aset "fillStyle" "#F00")
-    (.fillRect 100 100 200 100)))
-
-(defn init [canvas-id]
-  (let [canvas (dom/get-element canvas-id)
-        ctx    (.getContext canvas "2d")]
-    (setup canvas ctx)
-    (letfn [(frame [dt]
-              (draw ctx)
-              (js/requestAnimationFrame frame))]
-      (js/requestAnimationFrame frame))))
-
-(init "sketch")
+(init)

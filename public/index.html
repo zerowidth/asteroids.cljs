@@ -4,7 +4,28 @@
     <link rel="stylesheet" href="sketch.css">
   </head>
   <body>
-    <canvas id="sketch"></canvas>
+    <p id="header">
+      <!-- <span class="title">Asteroids</span> -->
+      <!-- &middot; -->
+      a <a href="http://zerowidth.com">zerowidth</a> experiment
+      <!-- &middot; <a href="https://github.com/zerowidth/asteroids">source</a> -->
+      <span class="controls">
+        <b>controls:</b>
+        <!-- arrow keys -->
+        <!-- &middot; spacebar -->
+        spacebar
+        <!-- &middot; z -->
+        <!-- &middot; x -->
+        <!-- &middot; q -->
+        <!-- &middot; p -->
+        <!-- &middot; i -->
+        <!-- &middot; a -->
+        <!-- &middot; shift -->
+      </span>
+    </p>
+    <div id="container">
+      <canvas id="sketch" width=0 height=0>asteroids</canvas>
+    </div>
     <script src="js/goog/base.js" type="text/javascript"></script>
     <script src="sketch.js" type="text/javascript"></script>
     <script type="text/javascript">goog.require("sketch.core");</script>

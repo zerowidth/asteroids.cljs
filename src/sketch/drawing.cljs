@@ -17,9 +17,11 @@
     (draw-polygon ctx points)))
 
 (defn draw-bodies [ctx bodies]
-  (when (seq bodies)
-    (draw-body ctx (first bodies))
-    (recur ctx (rest bodies))))
+  (let [by-color (group-by :color bodies)]
+    (doseq [[color group] by-color]
+      (doseq [body group]
+        (aset ctx "fillStyle" color)
+        (draw-body ctx body)))))
 
 (defn draw [ctx state width height]
   (let [width (:width state)

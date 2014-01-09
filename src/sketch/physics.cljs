@@ -1,11 +1,11 @@
-(ns sketch.physics)
+(ns sketch.physics
+  (:require [sketch.vector :as v]
+            [sketch.rotation :as r]))
 
-(defn add-vec [a b]
-  [(+ (a 0) (b 0)) (+ (a 1) (b 1))])
+(defn integrate [dt {:keys [position velocity
+                            orientation angular-velocity] :as body}]
+  (let [new-position (v/+ position (v/* velocity dt))
+        new-orientation (r/add-angle orientation (* angular-velocity dt))]
+    (assoc body :position new-position
+           :orientation new-orientation)))
 
-(defn scale-vec [v s]
-  [(* (v 0) s) (* (v 1) s)])
-
-(defn integrate [dt {:keys [position velocity] :as body}]
-  (let [new-position (add-vec position (scale-vec velocity dt))]
-    (assoc body :position new-position)))

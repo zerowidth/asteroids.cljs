@@ -4,8 +4,7 @@
             [goog.style :as style]
             [goog.events :as events]
             [sketch.world :as world]
-            [sketch.drawing :as drawing]
-            )
+            [sketch.drawing :as drawing])
   (:require-macros [sketch.macros :as debug]))
 
 ; 31 is height of header p tag, so 10px on bottom/sides
@@ -35,12 +34,12 @@
 (defn keydown [event]
   (condp = (.-keyCode event)
     32 (swap! paused not)
-    :nothing))
+    :ignored))
 
-(defn blur-window [event]
+(defn window-onblur [event]
   (compare-and-set! running true false))
 
-(defn focus-window [event]
+(defn window-onfocus [event]
   (if (compare-and-set! running false true)
     (request-next-frame)))
 
@@ -53,8 +52,8 @@
     (style/setSize container canvas-width canvas-height)
     (style/setWidth header canvas-width))
   (events/listen js/document "keydown" keydown)
-  (events/listen js/window "blur" blur-window)
-  (events/listen js/window "focus" focus-window)
+  (events/listen js/window "blur" window-onblur)
+  (events/listen js/window "focus" window-onfocus)
   ; invert the y coordinates so y starts at bottom
   (.setTransform ctx 1 0 0 -1 0 canvas-height))
 

@@ -17,10 +17,8 @@
    :offsets [[0 0] [10 0] [10 10] [0 10]]
 
    ; what it looks like
-   :color "#CCC"
+   :color "#F00"
    })
-
-(def test-body {:position [100 0] :velocity [100 50]})
 
 (defn test-square
   "create a test square centered around x and y and of size size"
@@ -43,15 +41,21 @@
         y (constrain (pos 1) height)]
     (assoc body :position [x y])))
 
-
 (defn add-body [state properties]
   (let [new-body (merge default-body properties)]
-    (swap! state (fn [state]
-                   (assoc state :bodies (conj (:bodies state) new-body))))))
+    (swap! state (fn [s]
+                   (let [bodies (:bodies s)]
+                     (assoc s :bodies (conj bodies new-body)))))
+    state))
 
 (defn setup [state width height]
   (reset! state {:bodies [] :particles [] :width width :height height})
-  (add-body state test-body))
+  (-> state
+      (add-body (test-square 100 100 10
+                             {:velocity [10 20]
+                              :color "#08F"}))
+      (add-body (test-square 100 0 25
+                             {:velocity [100 50]}))))
 
 (defn update [state dt]
   (let [dt (/ dt 1000)

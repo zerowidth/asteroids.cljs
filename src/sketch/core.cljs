@@ -26,7 +26,7 @@
   (let [elapsed (- timestamp @clock)]
     (when (and @running (not @paused))
       (swap! state world/update elapsed)
-      (drawing/draw ctx @state)))
+      (drawing/draw ctx @state canvas-width canvas-height)))
   (reset! clock timestamp)
   (request-next-frame))
 

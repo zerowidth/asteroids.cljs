@@ -53,7 +53,7 @@
       (add-body (test-square 100 100 10
                              {:velocity [10 20]
                               :color "#08F"}))
-      (add-body (test-square 100 0 25
+      (add-body (test-square 100 0 100
                              {:velocity [100 50]}))))
 
 (defn update [state dt]

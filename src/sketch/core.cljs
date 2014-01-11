@@ -4,8 +4,7 @@
             [goog.style :as style]
             [goog.events :as events]
             [sketch.world :as world]
-            [sketch.drawing :as drawing])
-  (:require-macros [sketch.macros :as debug]))
+            [sketch.drawing :as drawing]))
 
 ; 31 is height of header p tag, so 10px on bottom/sides
 (def canvas-width (- (.-width (gdom/getViewportSize)) 20))
@@ -62,4 +61,5 @@
   (world/setup state canvas-width canvas-height)
   (request-next-frame))
 
+(enable-console-print!)
 (init)

@@ -1,5 +1,4 @@
-(ns sketch.vector
-  (:require-macros [sketch.macros :as debug]))
+(ns sketch.vector)
 
 (defn + [[ax ay] [bx by]]
   [(cljs.core/+ ax bx) (cljs.core/+ ay by)])

@@ -1,6 +1,5 @@
 (ns sketch.drawing
-  (:require [sketch.vector :as v])
-  (:require-macros [sketch.macros :as debug]))
+  (:require [sketch.vector :as v]))
 
 (defn draw-polygon [ctx points]
   (let [moveTo (.-moveTo ctx)

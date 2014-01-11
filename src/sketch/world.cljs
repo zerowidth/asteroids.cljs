@@ -1,7 +1,6 @@
 (ns sketch.world
   (:require [sketch.physics :as physics]
-            [sketch.rotation :as rot])
-  (:require-macros [sketch.macros :as debug]))
+            [sketch.rotation :as rot]))
 
 (def default-body
   {

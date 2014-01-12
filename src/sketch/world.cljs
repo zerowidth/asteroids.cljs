@@ -26,7 +26,7 @@
   ([x y size properties]
    (let [hw (/ size 2) ; half-width
          offsets [[(- hw) (- hw)] [hw (- hw)] [hw hw] [(- hw) hw]] ]
-     (merge default-body properties {:position [x y] :offsets offsets}))))
+     (merge properties {:position [x y] :offsets offsets}))))
 
 (defn constrain [n size]
   (loop [value n]
@@ -41,15 +41,13 @@
     (assoc body :position [x y])))
 
 (defn add-body [state properties]
-  (let [new-body (merge default-body properties)]
-    (swap! state (fn [s]
-                   (let [bodies (:bodies s)]
-                     (assoc s :bodies (conj bodies new-body)))))
-    state))
+  (let [new-body (merge default-body properties)
+        bodies (:bodies state)]
+    (assoc state :bodies (conj bodies new-body))))
 
-(defn setup [state width height]
-  (reset! state {:bodies [] :particles [] :width width :height height})
+(defn setup [state]
   (-> state
+      (assoc :bodies [] :particles [])
       (add-body (test-square 100 100 10
                              {:velocity [10 20]
                               :color "#08F"}))

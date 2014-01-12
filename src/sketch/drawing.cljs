@@ -35,9 +35,7 @@
       (aset ctx "fillStyle" color)
       (draw-body ctx body width height))))
 
-(defn draw [ctx state width height]
-  (let [width (:width state)
-        height (:height state)]
-    (doto ctx
-      (.clearRect 0 0 width height)))
-  (draw-bodies ctx (:bodies state) width height))
+(defn draw [{:keys [width height ctx bodies]}]
+  (doto ctx
+    (.clearRect 0 0 width height))
+  (draw-bodies ctx bodies width height))

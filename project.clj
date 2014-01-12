@@ -19,7 +19,7 @@
                                    :output-dir "public/js"
                                    :optimizations :none
                                    :source-map true}}
-                       {:id "karma-test"
+                       {:id "test"
                         :source-paths ["src" "test"]
                         :compiler {:output-to "target/karma-test.js"
                                    :pretty-print true,

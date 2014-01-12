@@ -1,7 +1,14 @@
-(ns sketch.vector)
+(ns sketch.vector
+  (:refer-clojure :exclude [+ - *]))
 
 (defn + [[ax ay] [bx by]]
   [(cljs.core/+ ax bx) (cljs.core/+ ay by)])
+
+(defn -
+  ([[x y]]
+   [(cljs.core/- x) (cljs.core/- y)])
+  ([[ax ay] [bx by]]
+   [(cljs.core/- ax bx) (cljs.core/- ay by)]))
 
 (defn * [[x y] scale]
   [(cljs.core/* x scale) (cljs.core/* y scale)])
@@ -18,9 +25,9 @@
     | cos(theta) -sin(theta) dx |
     | sin(theta)  cos(theta) dy |
   "
-  [v translation orientation]
+  [v translation rotation]
   (let [[x y] v
         [dx dy] translation
-        [r i] orientation]
-    [(cljs.core/+ (cljs.core/* r x) (cljs.core/* i (- y)) dx)
-     (cljs.core/+ (cljs.core/* i x) (cljs.core/* r y) dy)]))
+        [r i] rotation]
+  [(cljs.core/+ (cljs.core/* r x) (cljs.core/* i (cljs.core/- y)) dx)
+   (cljs.core/+ (cljs.core/* i x) (cljs.core/* r y) dy)]))

@@ -1,4 +1,5 @@
-(ns sketch.rotation)
+(ns sketch.rotation
+  (:refer-clojure :exclude [+]))
 
 (defn from-angle [angle]
   [(Math/cos angle) (Math/sin angle)])

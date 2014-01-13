@@ -13,6 +13,10 @@
 (defn * [[x y] scale]
   [(cljs.core/* x scale) (cljs.core/* y scale)])
 
+(defn distance [a b]
+  (let [[x y] (- b a)]
+    (Math.sqrt (cljs.core/+ (cljs.core/* x x) (cljs.core/* y y)))))
+
 (defn transform
   " | a b c |   | x |   | ax + by + c |
     | e f g | * | y | = | ex + fy + g |

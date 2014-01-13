@@ -1,12 +1,9 @@
 (ns sketch.test.physics
-  (:require [purnam.cljs]
+  (:require [sketch.test.helpers]
             [sketch.test.fixtures :as f]
             [sketch.physics :as p]
             [sketch.vector :as v])
-  (:use-macros [purnam.test :only [init describe it is is-not]]))
-
-(init) ; initialize jasmine
-
+  (:use-macros [purnam.test :only [describe it is is-not]]))
 
 (describe
   {:doc "polygonal-area"}

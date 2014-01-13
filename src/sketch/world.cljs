@@ -1,5 +1,6 @@
 (ns sketch.world
   (:require [sketch.physics :as physics]
+            [sketch.vector :as v]
             [sketch.rotation :as rot]))
 
 (def default-body
@@ -44,6 +45,17 @@
   (let [new-body (merge default-body properties)
         bodies (:bodies state)]
     (assoc state :bodies (conj bodies new-body))))
+
+(defn recenter-on-centroid
+  "reposition a body around its computed centroid"
+  [{:keys [position orientation offsets centroid] :as body}]
+  (let [; transformed centroid offset
+        offset (v/rotate centroid orientation)
+        ; position change needs transformed offset
+        position (v/+ position offset)
+        ; but the offsets themselves do not.
+        offsets (map #(v/- % centroid) offsets)]
+  (assoc body :position position :offsets offsets)))
 
 (defn setup [state]
   (-> state

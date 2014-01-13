@@ -5,7 +5,7 @@
 (def polygon-offsets [[0 0] [10 0] [10 10] [0 20]])
 (def test-square
   {:position [0 0]
-   :orientaton [1 0]
+   :orientation [1 0]
    :density 2
    :offsets square-offsets})
 

@@ -17,6 +17,12 @@
   (let [[x y] (- b a)]
     (Math.sqrt (cljs.core/+ (cljs.core/* x x) (cljs.core/* y y)))))
 
+(defn rotate
+  "rotate a vector by a given rotation"
+  [[x y] [r i]]
+  [(cljs.core/+ (cljs.core/* r x) (cljs.core/* i (cljs.core/- y)))
+   (cljs.core/+ (cljs.core/* i x) (cljs.core/* r y))])
+
 (defn transform
   " | a b c |   | x |   | ax + by + c |
     | e f g | * | y | = | ex + fy + g |

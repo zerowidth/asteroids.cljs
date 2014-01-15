@@ -13,6 +13,12 @@
 (defn * [[x y] scale]
   [(cljs.core/* x scale) (cljs.core/* y scale)])
 
+(defn cross-product
+  "Vector 'cross product', which is a scalar for 2d vectors.
+   It's the area of the parallelogram formed by the two vectors."
+  [[x0 y0] [x1 y1]]
+  (cljs.core/- (cljs.core/* x0 y1) (cljs.core/* x1 y0)))
+
 (defn distance [a b]
   (let [[x y] (- b a)]
     (Math.sqrt (cljs.core/+ (cljs.core/* x x) (cljs.core/* y y)))))

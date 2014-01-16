@@ -52,7 +52,12 @@
       (is (:centroid square) [5 5]))
   (it "sets the inverse moment of area"
       ; bh/12 * (b^2 + h^2) = 100*200/12 => 12/(100*200)
-      (is-within-delta (:inverse-moment square) (/ 12 (* 100 200))))
+      (is-within-delta (:inverse-moment square) 0.0005999))
+  (it "takes mass into account"
+      (is-within-delta
+        (:inverse-moment (p/physical-properties
+                         (assoc f/test-square :density 0.01)))
+        0.05999))
   (it "does not override inverse moment if set"
       (is
         (:inverse-moment (p/physical-properties

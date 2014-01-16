@@ -45,7 +45,7 @@
   (let [signed-area (polygonal-area offsets)
         c (centroid offsets)
         mass (* density signed-area)
-        moment (moment-of-area offsets c signed-area)
+        moment (* (/ mass signed-area) (moment-of-area offsets c signed-area))
         inv-mass (if (> mass 0) (/ mass) 0)
         inv-moment (if (> moment 0) (/ moment) 0)]
     (merge-with (fn [a b] a) body

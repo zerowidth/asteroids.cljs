@@ -2,3 +2,4 @@ tags
 public/js
 public/sketch.js
 target
+node_modules

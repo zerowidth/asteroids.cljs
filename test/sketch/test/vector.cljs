@@ -19,3 +19,11 @@
   (it "rotates by an arbitrary angle"
       (is-near (v/rotate [1 0] (r/from-angle (/ Math/PI 3)))
                [0.5 0.866])))
+
+(describe
+  {:doc "dot-product"}
+  (it "returns the projection of a vector onto another"
+      (is (v/dot-product [1 0] [1 0]) 1)
+      (is (v/dot-product [1 0] [0 1]) 0)
+      (is (v/dot-product [2 0] [1 0]) 2)
+      (is (v/dot-product [-1 -1] [1 1]) -2)))

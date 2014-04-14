@@ -1,8 +1,25 @@
 (ns sketch.geometry
   (:require [sketch.vector :as v]))
 
+(defn aabb [vertices]
+  "Returns an axis-aligned bounding box for a given list of vertices"
+  [[(apply min (map first vertices)) (apply min (map last vertices))]
+   [(apply max (map first vertices)) (apply max (map last vertices))]]
+  )
+
+(defn aabb-center [vertices]
+  "Returns the center of an axis-aligned bounding box for a list of vertices"
+  (let [[[x0 y0] [x1 y1]] (aabb vertices)]
+    [(+ x0 (/ (- x1 x0) 2))
+     (+ y0 (/ (- y1 y0) 2))]))
+
 (defn vertex-pairs [vertices]
+  "Given a list of vertices, return all sequential pairs"
   (partition 2 1 (concat vertices (list (first vertices)))))
+
+(defn vertex-pair-to-vector [a b]
+  "Given a vertex pair, return a vector describing a->b"
+  (v/- b a))
 
 (defn polygonal-area
   "Use the surveyor's formula for calculating the signed area of a polygon"
@@ -37,3 +54,75 @@
         ix (- ix (* area cx cx))
         iy (- iy (* area cy cy))]
     (+ ix iy)))
+
+(defn project-polygon-on-axis [vertices axis]
+  "Project a polygon onto a given axis. Returns a pair of points on the axis."
+  (let [projections (map #(v/dot-product % axis) vertices)]
+    [ (apply min projections) (apply max projections) ]))
+
+(defn interval-overlap [[a0 a1] [b0 b1]]
+  "Calculate by how much two intervals overlap.
+
+   --a--
+          --b-- => 0
+
+   --a--
+      --b--     => 2
+
+      --a--
+   --b--        => 2
+
+          --a--
+   --b--        => 0
+
+   ----a----
+     --b--      => 5
+
+     --a--
+   ----b----    => 5
+
+   Returns an integer. 0 means no overlap.
+   "
+  (if (or (> b0 a1) (< b1 a0))
+    0
+    (- (min a1 b1) (max a0 b0))))
+
+(defn overlap-along-axis [a b axis]
+  "Given two polygons and an axis, determine how much they overlap."
+  (interval-overlap
+    (project-polygon-on-axis a axis)
+    (project-polygon-on-axis b axis)))
+
+(defn separating-axes [a b]
+  "find the separating axes given two polygons."
+  (->> (concat
+         (vertex-pairs a)
+         (vertex-pairs b))
+       (map #(apply vertex-pair-to-vector %))
+       (map v/perpendicular-normal)))
+
+(defn normalize-direction [axis a b]
+  "Modifies an axis so that it points from polygon a -> polygon as calculated
+   based on the centers of the polygons' axis-aligned bounding boxes."
+  (let [center-a (aabb-center (aabb a))
+        center-b (aabb-center (aabb b))
+        direction (v/- center-b center-a)]
+    (if (> (v/dot-product direction axis) 0)
+      axis
+      (v/- axis))))
+
+(defn minimum-separation-axis
+  "Calculate the minimum separating axis between two polygons.
+
+   Returns nil if not overlapping, or a pair of:
+   - A vector normal of the minimum separation axis of the two polygons.
+   - The magnitude of the separation along the axis.
+   "
+  [a b]
+  (let [axes (separating-axes a b)
+        overlaps (map #(overlap-along-axis a b %) axes)
+        pairs (map vector axes overlaps)
+        min-overlap (apply min-key last pairs)]
+    (if (= 0 (last min-overlap))
+      nil
+      [(normalize-direction (first min-overlap) a b) (last min-overlap)])))

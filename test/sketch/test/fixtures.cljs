@@ -8,4 +8,3 @@
    :orientation [1 0]
    :density 2
    :offsets square-offsets})
-

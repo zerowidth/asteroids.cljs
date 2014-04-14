@@ -23,9 +23,18 @@
   [[x0 y0] [x1 y1]]
   (cljs.core/- (cljs.core/* x0 y1) (cljs.core/* x1 y0)))
 
+(defn magnitude [[x y]]
+  (Math.sqrt (cljs.core/+ (cljs.core/* x x) (cljs.core/* y y))))
+
+(defn normalize [v]
+  (let [length (magnitude v)]
+    (if (> length 0) (* v (/ length)) v)))
+
+(defn perpendicular-normal [[x y]]
+  (normalize [(cljs.core/- y) x]))
+
 (defn distance [a b]
-  (let [[x y] (- b a)]
-    (Math.sqrt (cljs.core/+ (cljs.core/* x x) (cljs.core/* y y)))))
+  (magnitude (- b a)))
 
 (defn rotate
   "rotate a vector by a given rotation"

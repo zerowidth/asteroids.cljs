@@ -13,8 +13,9 @@
 (defn * [[x y] scale]
   [(cljs.core/* x scale) (cljs.core/* y scale)])
 
-(defn dot-product [[x0 y0] [x1 y1]]
+(defn dot-product
   "Vector dot product"
+ [[x0 y0] [x1 y1]]
   (cljs.core/+ (cljs.core/* x0 x1) (cljs.core/* y0 y1)))
 
 (defn cross-product

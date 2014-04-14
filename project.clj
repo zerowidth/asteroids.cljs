@@ -4,7 +4,7 @@
 
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-2202"]
-                 [im.chit/purnam "0.1.8"]]
+                 [im.chit/purnam.test "0.4.3"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [com.cemerick/clojurescript.test "0.2.1"]]

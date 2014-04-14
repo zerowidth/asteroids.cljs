@@ -1,6 +1,5 @@
 (ns sketch.test.vector
-  (:require [purnam.cljs]
-            [sketch.test.helpers]
+  (:require [sketch.test.helpers]
             [sketch.rotation :as r]
             [sketch.vector :as v])
   (:use-macros

@@ -1,9 +1,6 @@
 (ns sketch.test.helpers
-  (:require [sketch.vector :as v])
-  (:use-macros
-    [purnam.test :only [init]]))
-
-(init) ; initialize purnam js helpers
+  (:require [purnam.test]
+            [sketch.vector :as v]))
 
 (def ^:dynamic *near-delta* 0.001)
 
@@ -16,8 +13,8 @@
                      (str
                        "Expression: " expr
                        "\nExpected " expected
-                          " to be near " actual
-                          "\nbut was " diff " away")))
+                       " to be near " actual
+                       "\nbut was " diff " away")))
              (< diff *near-delta*))))
 
 (js/beforeEach
